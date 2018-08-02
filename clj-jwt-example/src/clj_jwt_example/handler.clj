@@ -23,21 +23,10 @@
   "shared secret string with metabase")
 
 (def ^:private metabase-jwt-url
+  "If not hard-coding the Metabase JWT URL, it's a good idea to validate the host to prevent a man-in-the-middle attack"
   "http://localhost:3000/auth/sso")
 
-(def ^:private redirectable-hosts
-  #{"localhost"})
-
-(defn- validate-redirect [uri-str]
-  (let [uri (java.net.URI. uri-str)
-        host (.getHost uri)]
-    ;; If the host is nil, it's localhost, otherwise check against our redirectable hosts set
-    (assert (or (nil? host)
-                (contains? redirectable-hosts host))
-            (format "Host '%s' not recognized as a redirectable host" host))))
-
 (defn- redirect-user-with-jwt [{:keys [email first-name last-name]} return_to]
-  (validate-redirect return_to)
   (let [jwt (jwt/sign {:email email, :first_name first-name :last_name last-name}
                       shared-secret)]
     (resp/redirect (str metabase-jwt-url "?jwt=" jwt "&return_to=" return_to))))
