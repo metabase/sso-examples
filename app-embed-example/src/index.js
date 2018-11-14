@@ -69,6 +69,9 @@ const App = () => (
                 `/analytics${getAppPath(location).replace(/^\/$/, "")}`,
               );
             }}
+            getAuthUrl={url =>
+              `/api/auth/metabase?return_to=${encodeURIComponent(url)}`
+            }
             navHeight={48}
           />
         )}

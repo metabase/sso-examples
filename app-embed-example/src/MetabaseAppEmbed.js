@@ -10,12 +10,13 @@ const MetabaseAppEmbed = ({
   path = "/",
   onMessage,
   onLocationChange,
+  getAuthUrl,
   navHeight = 0,
 }) => {
   // ref for the iframe HTML element
   const iframeEl = useRef(null);
   // ref for the current `src` attribute
-  const src = useRef(path);
+  const src = useRef(`${base}${path}`);
   // ref for the current location, as reported via postMessage
   const location = useRef(null);
 
@@ -53,7 +54,7 @@ const MetabaseAppEmbed = ({
 
   if (location.current == null) {
     // location syncing not enabled, update src
-    src.current = path;
+    src.current = `${base}${path}`;
   } else if (location.current !== path) {
     // location syncing enabled, use postMessage to update location
     iframeEl.current.contentWindow.postMessage(
@@ -68,10 +69,15 @@ const MetabaseAppEmbed = ({
     );
   }
 
+  // on first load replace the src with the auth URL, if any
+  if (getAuthUrl && !iframeEl.current) {
+    src.current = getAuthUrl(src.current);
+  }
+
   return (
     <iframe
       ref={iframeEl}
-      src={`${base}${src.current}`}
+      src={src.current}
       title={title}
       className={className}
       style={{ border: "none", width: "100%", ...style }}
