@@ -4,8 +4,10 @@ const jwt = require("jsonwebtoken");
 const url = require("url");
 
 const PORT = process.env.PORT || 3535;
-const METABASE_JWT_URL = "http://localhost:3000/auth/sso";
+
+const METABASE_URL = process.env.METABASE_URL || "http://localhost:3000";
 const METABASE_JWT_SHARED_SECRET =
+  process.env.METABASE_JWT_SHARED_SECRET ||
   "5a0c682f97949a5b36603db70297ef9c708ca139b92415ec20bf8f5aae03fdc0";
 
 const signUserToken = user =>
@@ -22,6 +24,8 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get("/api/config", (req, res) => res.json({ METABASE_URL }));
+
 app.get("/api/auth/metabase", (req, res) => {
   const user = {
     email: "embedtest@metabase.com",
@@ -30,7 +34,7 @@ app.get("/api/auth/metabase", (req, res) => {
   };
   res.redirect(
     url.format({
-      pathname: METABASE_JWT_URL,
+      pathname: `${METABASE_URL}/auth/sso`,
       query: {
         jwt: signUserToken(user),
         return_to: req.query.return_to,
@@ -38,6 +42,10 @@ app.get("/api/auth/metabase", (req, res) => {
     }),
   );
 });
+
+// PRODUCTION
+app.use(express.static(__dirname + "/build"));
+app.get("/*", (req, res) => res.sendFile(__dirname + "/build/index.html"));
 
 app.listen(PORT, () => {
   console.log("Listening on port " + PORT);
