@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 
 import "./reset.css";
@@ -18,10 +18,11 @@ const getAppPath = location =>
 
 const App = () => {
   const config = useFetch("/api/config");
+  const navEl = useRef(null);
   return (
     <Router>
       <div>
-        <nav style={{ background: "black" }}>
+        <nav ref={navEl} style={{ background: "black" }}>
           <ul>
             <li>
               <NavLink exact to="/">
@@ -75,7 +76,7 @@ const App = () => {
                 getAuthUrl={url =>
                   `/api/auth/metabase?return_to=${encodeURIComponent(url)}`
                 }
-                navHeight={48}
+                navHeight={navEl.current ? navEl.current.offsetHeight : null}
               />
             )
           }

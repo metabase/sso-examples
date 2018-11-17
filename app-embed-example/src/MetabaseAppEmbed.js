@@ -1,6 +1,4 @@
-import React, { useEffect, useRef } from "react";
-
-import { iframeResizer } from "iframe-resizer";
+import React, { useEffect, useRef, useState } from "react";
 
 const MetabaseAppEmbed = ({
   title = "Metabase",
@@ -10,6 +8,7 @@ const MetabaseAppEmbed = ({
   path = "/",
   onMessage,
   onLocationChange,
+  onFrameChange,
   getAuthUrl,
   navHeight = 0,
 }) => {
@@ -19,15 +18,7 @@ const MetabaseAppEmbed = ({
   const src = useRef(`${base}${path}`);
   // ref for the current location, as reported via postMessage
   const location = useRef(null);
-
-  // setup iFrameResize
-  useEffect(() => {
-    const minHeight =
-      typeof navHeight === "number"
-        ? window.innerHeight - navHeight
-        : undefined;
-    iframeResizer({ minHeight }, iframeEl.current);
-  }, []);
+  const [frame, setFrame] = useState();
 
   // setup postMessage listener
   useEffect(() => {
@@ -37,12 +28,17 @@ const MetabaseAppEmbed = ({
         if (e.data.metabase.type === "location") {
           const { pathname, search, hash } = e.data.metabase.location;
           location.current = [pathname, search, hash].join("");
+          if (onLocationChange) {
+            onLocationChange(e.data.metabase.location);
+          }
+        } else if (e.data.metabase.type === "frame") {
+          setFrame(e.data.metabase.frame);
+          if (onFrameChange) {
+            onFrameChange(e.data.metabase.frame);
+          }
         }
         if (onMessage) {
           onMessage(e.data.metabase);
-        }
-        if (onLocationChange && e.data.metabase.type === "location") {
-          onLocationChange(e.data.metabase.location);
         }
       }
     };
@@ -74,13 +70,21 @@ const MetabaseAppEmbed = ({
     src.current = getAuthUrl(src.current);
   }
 
+  const frameMode = frame && frame.mode;
+  const height =
+    frameMode === "fit"
+      ? window.innerHeight - (navHeight || 0)
+      : frameMode === "normal"
+      ? frame.height
+      : undefined;
+
   return (
     <iframe
       ref={iframeEl}
       src={src.current}
       title={title}
       className={className}
-      style={{ border: "none", width: "100%", ...style }}
+      style={{ border: "none", width: "100%", height: height, ...style }}
     />
   );
 };
