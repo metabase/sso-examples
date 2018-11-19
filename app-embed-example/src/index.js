@@ -19,6 +19,7 @@ const getAppPath = location =>
 const App = () => {
   const config = useFetch("/api/config");
   const navEl = useRef(null);
+  const innerHeight = useInnerHeight();
   return (
     <Router>
       <div>
@@ -76,7 +77,10 @@ const App = () => {
                 getAuthUrl={url =>
                   `/api/auth/metabase?return_to=${encodeURIComponent(url)}`
                 }
-                navHeight={navEl.current ? navEl.current.offsetHeight : null}
+                fitHeight={
+                  innerHeight -
+                  (navEl.current ? navEl.current.offsetHeight : 56)
+                }
               />
             )
           }
@@ -99,5 +103,15 @@ const useFetch = (...fetchArgs) => {
   }, fetchArgs);
   return value;
 };
+
+function useInnerHeight() {
+  const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+  useEffect(() => {
+    const onResize = () => setInnerHeight(window.innerHeight);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return innerHeight;
+}
 
 ReactDOM.render(<App />, document.getElementById("root"));

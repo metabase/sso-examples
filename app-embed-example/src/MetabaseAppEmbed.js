@@ -10,7 +10,7 @@ const MetabaseAppEmbed = ({
   onLocationChange,
   onFrameChange,
   getAuthUrl,
-  navHeight = 0,
+  fitHeight,
 }) => {
   // ref for the iframe HTML element
   const iframeEl = useRef(null);
@@ -72,10 +72,10 @@ const MetabaseAppEmbed = ({
 
   const frameMode = frame && frame.mode;
   const height =
-    frameMode === "fit"
-      ? window.innerHeight - (navHeight || 0)
-      : frameMode === "normal"
+    frameMode === "normal"
       ? frame.height
+      : frameMode === "fit" && fitHeight != null
+      ? fitHeight
       : undefined;
 
   return (
