@@ -2,9 +2,11 @@ version: '3'
 services:
 
   metabase:
-    image: metabase/metabase:app-embedding
+    image: metabase/metabase-enterprise:latest
     environment:
       - MB_PREMIUM_EMBEDDING_TOKEN=${MB_PREMIUM_EMBEDDING_TOKEN}
+      - MB_ENABLE_EMBEDDING=true
+      - MB_EMBEDDING_APP_ORIGIN=http://${HOST}:3001
       - MB_JWT_ENABLED=true
       - MB_JWT_IDENTITY_PROVIDER_URI=http://${HOST}:3001/api/auth/metabase
       - MB_JWT_SHARED_SECRET=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff

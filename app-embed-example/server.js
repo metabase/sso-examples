@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3535;
 const METABASE_URL = process.env.METABASE_URL || "http://localhost:3000";
 const METABASE_JWT_SHARED_SECRET =
   process.env.METABASE_JWT_SHARED_SECRET ||
-  "5a0c682f97949a5b36603db70297ef9c708ca139b92415ec20bf8f5aae03fdc0";
+  "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
 
 const signUserToken = user =>
   jwt.sign(
