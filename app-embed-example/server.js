@@ -27,6 +27,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/api/config", (req, res) => res.json({ METABASE_URL }));
 
 app.get("/api/auth/metabase", (req, res) => {
+  // NOTE: in a real application you would use the embedding application's session to determine which user to use here.
+  // If no session exists you would need to show an error or redirect to the embedding application's login page.
   const user = {
     email: "embedtest@metabase.com",
     first_name: "Hello",
