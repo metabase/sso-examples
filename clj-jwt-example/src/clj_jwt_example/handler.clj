@@ -27,7 +27,10 @@
   "http://localhost:3000/auth/sso")
 
 (defn- redirect-user-with-jwt [{:keys [email first-name last-name]} return_to]
-  (let [jwt (jwt/sign {:email email, :first_name first-name :last_name last-name}
+  (let [jwt (jwt/sign {:email      email
+                       :first_name first-name
+                       :last_name  last-name
+                       :exp        (+ (int (/ (System/currentTimeMillis) 1000)) (* 60 10))} ; 10 minute expiration
                       shared-secret)]
     (resp/redirect (str metabase-jwt-url "?jwt=" jwt "&return_to=" return_to))))
 
