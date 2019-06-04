@@ -1,0 +1,5 @@
+{
+    "require": {
+        "fproject/php-jwt": "^4.0"
+    }
+}
