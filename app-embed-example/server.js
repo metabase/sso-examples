@@ -16,6 +16,7 @@ const signUserToken = user =>
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name,
+      exp: Math.round(Date.now() / 1000) + (60 * 10) // 10 minute expiration
     },
     METABASE_JWT_SHARED_SECRET,
   );
