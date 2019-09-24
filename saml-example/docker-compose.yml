@@ -1,0 +1,40 @@
+version: "3"
+services:
+  metabase:
+    image: metabase/metabase-enterprise:latest
+    environment:
+      - MB_PREMIUM_EMBEDDING_TOKEN=${MB_PREMIUM_EMBEDDING_TOKEN}
+      - MB_SAML_ENABLED=true
+      - MB_SAML_APPLICATION_NAME=Metabase
+      - MB_SAML_IDENTITY_PROVIDER_URI=http://${HOST}:7000/saml/sso
+      - MB_SAML_IDENTITY_PROVIDER_CERTIFICATE=${MB_SAML_IDENTITY_PROVIDER_CERTIFICATE}
+      - MB_SAML_ATTRIBUTE_EMAIL=email
+      - MB_SAML_ATTRIBUTE_FIRSTNAME=firstName
+      - MB_SAML_ATTRIBUTE_LASTNAME=lastName
+      - MB_DB_FILE=/data/metabase.db
+    volumes:
+      - metabase-data:/data
+    ports:
+      - "3000:3000"
+
+  saml:
+    build: https://github.com/mcguinness/saml-idp.git
+    volumes:
+      - ./idp-private-key.pem:/idp-private-key.pem
+      - ./idp-public-cert.pem:/idp-public-cert.pem
+    ports:
+      - "7000:7000"
+    entrypoint:
+      - node
+      - app.js
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "7000"
+      - --acs
+      - https://foo.okta.com/auth/saml20/example
+      - --aud
+      - https://www.okta.com/saml2/service-provider/spf5aFRRXFGIMAYXQPNV"
+
+volumes:
+  metabase-data:
