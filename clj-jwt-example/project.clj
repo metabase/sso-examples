@@ -8,7 +8,7 @@
                  [buddy/buddy-core "1.2.0"]
                  [buddy/buddy-sign "1.5.0"]
                  [hiccup "1.0.5"]]
-  :plugins [[lein-ring "0.9.7"]]
+  :plugins [[lein-ring "0.12.5"]]
   :ring {:handler clj-jwt-example.handler/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
