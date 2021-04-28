@@ -12,8 +12,6 @@ services:
       - MB_SAML_ATTRIBUTE_FIRSTNAME=firstName
       - MB_SAML_ATTRIBUTE_LASTNAME=lastName
       - MB_DB_FILE=/data/metabase.db
-    volumes:
-      - metabase-data:/data
     ports:
       - "3000:3000"
 
@@ -35,6 +33,3 @@ services:
       - https://foo.okta.com/auth/saml20/example
       - --aud
       - https://www.okta.com/saml2/service-provider/spf5aFRRXFGIMAYXQPNV"
-
-volumes:
-  metabase-data:
