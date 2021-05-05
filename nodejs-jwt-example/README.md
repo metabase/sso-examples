@@ -1,9 +1,6 @@
 # nodejs-jwt-example
 
-This is an example JSON Web Token (JWT) based Single Sign-On (SSO)
-application for use with Metabase. Users would login to this example
-application and a JWT token would be passed to a Metabase instance and
-would be used for SSO.
+This is an example JSON Web Token (JWT) based Single Sign-On (SSO) application for use with Metabase. Users would login to this example application and a JWT token would be passed to a Metabase instance and would be used for SSO.
 
 The typical flow of a JWT based SSO interaction with Metabase is below:
 
@@ -24,7 +21,11 @@ You will need [Node.js][] and [yarn][] or [npm][] installed.
 
 ## Running
 
-To start a web server on port 3535, using [yarn][]:
+- Configure your Metabase server (needs to be Enterprise version!) with JWT authentication where the `JWT IDENTITY PROVIDER URI` is this application URL login endpoint (should be http://localhost:3535/login). 
+- Replace the `METABASE_JWT_SHARED_SECRET` in the index.js with the `STRING USED BY THE JWT SIGNING KEY` that you get from the JWT authentication page in Metabase.
+- Create a question in Metabase and log out
+
+After everything is configured, run the application using [yarn][]:
 
     yarn
     PORT=3535 yarn start
@@ -33,3 +34,5 @@ Or using [npm][]:
 
     npm install
     PORT=3535 npm start
+
+- Go to http://localhost:3000/question/1 and you will be redirected to the sign in page, where you will have to click on the `Sign in` button to use this application URL where you can use `test@metabase.com` user and `test1` password to log in.

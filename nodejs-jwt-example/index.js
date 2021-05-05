@@ -6,7 +6,7 @@ const escapeHtml = require("escape-html");
 const PORT = process.env.PORT || 3535;
 const METABASE_JWT_URL = "http://localhost:3000/auth/sso";
 const METABASE_JWT_SHARED_SECRET =
-  "56aac251b84fb05dc4a63a254156e9ccd328f284eb415391c0ce35c01bb47d03";
+  "152f7e25e62baf2441ca63c3fd7bb08ce78bb52717e7b4f05c854b4f8901d4b0";
 
 // mock users
 const USERS = [
