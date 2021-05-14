@@ -13,12 +13,8 @@ services:
       - MB_SAML_APPLICATION_NAME=${MB_SAML_APPLICATION_NAME}
       - MB_SAML_IDENTITY_PROVIDER_URI=${MB_SAML_IDENTITY_PROVIDER_URI}
       - MB_SAML_IDENTITY_PROVIDER_CERTIFICATE=${MB_SAML_IDENTITY_PROVIDER_CERTIFICATE}
-      - MB_DB_FILE=/data/metabase.db
-    volumes:
-      - metabase-data:/data
     ports:
       - "3000:3000"
-
   metalbase:
     build: .
     environment:
@@ -27,6 +23,3 @@ services:
       - METABASE_JWT_SHARED_SECRET=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     ports:
       - "3001:3001"
-
-volumes:
-  metabase-data:

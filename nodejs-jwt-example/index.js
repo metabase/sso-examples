@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const url = require("url");
 const escapeHtml = require("escape-html");
@@ -7,7 +6,7 @@ const escapeHtml = require("escape-html");
 const PORT = process.env.PORT || 3535;
 const METABASE_JWT_URL = "http://localhost:3000/auth/sso";
 const METABASE_JWT_SHARED_SECRET =
-  "REPLACE WITH KEY FROM http://localhost:3000/admin/settings/authentication/jwt";
+  "152f7e25e62baf2441ca63c3fd7bb08ce78bb52717e7b4f05c854b4f8901d4b0";
 
 // mock users
 const USERS = [
@@ -39,7 +38,11 @@ const signUserToken = user =>
 
 const app = express();
 
-app.use(bodyParser.urlencoded());
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  res.redirect("/login?return_to=http://localhost:3000")
+})
 
 app.get("/login", (req, res) => {
   res.send(`

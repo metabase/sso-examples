@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const url = require("url");
 
@@ -8,7 +7,7 @@ const PORT = process.env.PORT || 3535;
 const METABASE_URL = process.env.METABASE_URL || "http://localhost:3000";
 const METABASE_JWT_SHARED_SECRET =
   process.env.METABASE_JWT_SHARED_SECRET ||
-  "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
 
 // This matches a user in the Sample Dataset
 const DEMO_USER = {
@@ -32,7 +31,7 @@ const signUserToken = user =>
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/config", (req, res) => res.json({ METABASE_URL }));
 

@@ -7,12 +7,11 @@
     "start": "node index.js"
   },
   "devDependencies": {
-    "prettier": "^1.14.0"
+    "prettier": "^2.2.1"
   },
   "dependencies": {
-    "body-parser": "^1.18.3",
     "escape-html": "^1.0.3",
-    "express": "^4.16.3",
-    "jsonwebtoken": "^8.3.0"
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1"
   }
 }

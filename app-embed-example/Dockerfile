@@ -1,15 +1,10 @@
-FROM node as builder
+FROM node:lts-alpine3.13 as builder
 
 WORKDIR /app
 
-COPY package.json yarn.lock /app/
-RUN yarn
-
+COPY server.js package.json yarn.lock /app/
 COPY src /app/src
 COPY public /app/public
-
-RUN yarn build
-
-COPY server.js /app/
+RUN yarn && yarn build
 
 CMD [ "node", "server.js" ]
