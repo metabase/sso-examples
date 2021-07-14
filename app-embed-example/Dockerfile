@@ -2,9 +2,9 @@ FROM node:lts-alpine3.13 as builder
 
 WORKDIR /app
 
-COPY server.js package.json yarn.lock /app/
+COPY server.js package.json package-lock.json /app/
 COPY src /app/src
 COPY public /app/public
-RUN yarn && yarn build
+RUN npm ci && npm run build
 
 CMD [ "node", "server.js" ]

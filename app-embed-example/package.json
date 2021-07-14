@@ -15,9 +15,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "client": "yarn start",
+    "client": "npm run start",
     "server": "nodemon server.js",
-    "dev": "yarn && concurrently --kill-others-on-fail \"PORT=3001 yarn client\" \"PORT=3002 yarn server\""
+    "dev": "npm i && concurrently --kill-others-on-fail \"PORT=3001 npm run client\" \"PORT=3002 npm run server\""
   },
   "eslintConfig": {
     "extends": "react-app"
