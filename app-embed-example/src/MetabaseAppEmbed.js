@@ -1,16 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import IframeResizer from "iframe-resizer-react";
 
 const MetabaseAppEmbed = ({
-  title = "Metabase",
-  className,
-  style = {},
   base = "",
   path = "/",
   onMessage,
   onLocationChange,
   onFrameChange,
-  getAuthUrl,
-  fitHeight,
 }) => {
   // ref for the iframe HTML element
   const iframeEl = useRef(null);
@@ -22,7 +18,7 @@ const MetabaseAppEmbed = ({
 
   // setup postMessage listener
   useEffect(() => {
-    const handleMessage = e => {
+    const handleMessage = (e) => {
       if (e.source === iframeEl.current.contentWindow && e.data.metabase) {
         // sync the location ref
         if (e.data.metabase.type === "location") {
@@ -61,30 +57,22 @@ const MetabaseAppEmbed = ({
         },
       },
       // FIXME SECURITY: use whitelisted origin instead of "*"
-      "*",
+      "*"
     );
   }
 
-  // on first load replace the src with the auth URL, if any
-  if (getAuthUrl && !iframeEl.current) {
-    src.current = getAuthUrl(src.current);
-  }
-
-  const frameMode = frame && frame.mode;
-  const height =
-    frameMode === "normal"
-      ? frame.height
-      : frameMode === "fit" && fitHeight != null
-      ? fitHeight
-      : undefined;
-
   return (
-    <iframe
-      ref={iframeEl}
+    <IframeResizer
+      log
+      forwardRef={iframeEl}
+      sizeHeight
+      checkOrigin={false}
+      bodyBackground="transparent"
       src={src.current}
-      title={title}
-      className={className}
-      style={{ border: "none", width: "100%", height: height, ...style }}
+      title="Metabase"
+      frameBorder="0"
+      style={{ width: "1px", minWidth: "100%" }}
+      allowtransparency
     />
   );
 };

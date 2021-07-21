@@ -13,7 +13,7 @@ import {
 
 import MetabaseAppEmbed from "./MetabaseAppEmbed";
 
-const getAppPath = location =>
+const getAppPath = (location) =>
   [location.pathname, location.search, location.hash].join("");
 
 const App = () => {
@@ -64,26 +64,26 @@ const App = () => {
         />
         <Route
           path="/analytics"
-          render={({ history, location, match }) =>
-            config && (
-              <MetabaseAppEmbed
-                base={config.METABASE_URL}
-                path={getAppPath(location).replace(/\/analytics/, "")}
-                onLocationChange={location => {
-                  history.push(
-                    `/analytics${getAppPath(location).replace(/^\/$/, "")}`,
-                  );
-                }}
-                getAuthUrl={url =>
-                  `/api/auth/metabase?return_to=${encodeURIComponent(url)}`
-                }
-                fitHeight={
-                  innerHeight -
-                  (navEl.current ? navEl.current.offsetHeight : 56)
-                }
-              />
-            )
-          }
+          render={({ history, location, match }) => (
+            <div>
+              above
+              {config && (
+                <MetabaseAppEmbed
+                  base={config.METABASE_URL}
+                  path={getAppPath(location).replace(/\/analytics/, "")}
+                  onLocationChange={(location) => {
+                    history.push(
+                      `/analytics${getAppPath(location).replace(/^\/$/, "")}`
+                    );
+                  }}
+                  getAuthUrl={(url) =>
+                    `/api/auth/metabase?return_to=${encodeURIComponent(url)}`
+                  }
+                />
+              )}
+              below
+            </div>
+          )}
         />
       </div>
     </Router>
@@ -99,7 +99,7 @@ const Logo = ({ size = 24 }) => (
 const useFetch = (...fetchArgs) => {
   const [value, setState] = useState(null);
   useEffect(async () => {
-    setState(await fetch(...fetchArgs).then(r => r.json()));
+    setState(await fetch(...fetchArgs).then((r) => r.json()));
   }, fetchArgs);
   return value;
 };
