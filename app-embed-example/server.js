@@ -2,7 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const url = require("url");
 
-const PORT = process.env.PORT || 3535;
+const PORT = process.env.PORT || 8080;
 
 const METABASE_URL = process.env.METABASE_URL || "http://localhost:3000";
 const METABASE_JWT_SHARED_SECRET =
@@ -14,7 +14,7 @@ const DEMO_USER = {
   id: 8,
   email: "aracely.jenkins@gmail.com",
   first_name: "Aracely",
-  last_name: "Jenkins"
+  last_name: "Jenkins",
 };
 
 const signUserToken = user =>
@@ -24,7 +24,7 @@ const signUserToken = user =>
       first_name: user.first_name,
       last_name: user.last_name,
       metalbase_user_id: user.id,
-      exp: Math.round(Date.now() / 1000) + 60 * 10 // 10 minute expiration
+      exp: Math.round(Date.now() / 1000) + 60 * 10, // 10 minute expiration
     },
     METABASE_JWT_SHARED_SECRET
   );
