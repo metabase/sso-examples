@@ -12,7 +12,7 @@ if curl -s http://$1/api/session/properties | jq -r '."setup-token"' | grep -ioE
 echo 'Setting up the instance' && \
 token=$(curl -s http://$1/api/session/properties | jq -r '."setup-token"') && \
 echo 'Setup token fetched, now configuring with:' && \
-echo "{'token':'$token','user':{'first_name':'a','last_name':'b','email':'a@b.com','site_name':'metabot1','password':'metabot1','password_confirm':'metabot1'},'database':null,'invite':null,'prefs':{'site_name':'metabot1','site_locale':'en','allow_tracking':'false'}}" > file.json && \
+echo "{'token':'$token','user':{'first_name':'Admin','last_name':'Test','email':'admin@test.test','site_name':'Embedding Test','password':'secretpass1','password_confirm':'secretpass1'},'database':null,'invite':null,'prefs':{'site_name':'Embedding Test','site_locale':'en','allow_tracking':'false'}}" > file.json && \
 sed 's/'\''/\"/g' file.json > file2.json && \
 cat file2.json && \
 sessionToken=$(curl -s http://$1/api/setup -H 'Content-Type: application/json' --data-binary @file2.json | jq -r '.id') && echo ' < Admin session token, exiting';fi

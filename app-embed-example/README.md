@@ -10,3 +10,5 @@ The easiest way to run the example is using Docker and `docker-compose`:
 2. Run `docker-compose up`
 3. Open `https://localhost:3000/` (Metabase itself), you can use `a@b.com` as the user and `metabot1` as the password
 4. Open `https://localhost:8080/` (the demo application)
+
+NOTE: don't forget to change the `MB_JWT_SHARED_SECRET` token if you're going to use Metabase in a production environment, as this token is the key that Metabase uses to generate the signed URL's
