@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   metabase:
-    image: metabase/metabase-enterprise:v1.43.2
+    image: metabase/metabase-enterprise:latest
     container_name: metabase_full_app_embedding_demo
     hostname: metabase
     volumes: 
