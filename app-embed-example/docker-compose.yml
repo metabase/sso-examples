@@ -4,8 +4,6 @@ services:
     image: metabase/metabase-enterprise:latest
     container_name: metabase_full_app_embedding_demo
     hostname: metabase
-    volumes: 
-    - /dev/urandom:/dev/random:ro
     ports:
       - 3000:3000
     environment: 
