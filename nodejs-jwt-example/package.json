@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "escape-html": "^1.0.3",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1"
   }
 }
