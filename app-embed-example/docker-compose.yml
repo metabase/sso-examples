@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   metabase:
-    image: metabase/metabase-enterprise:latest
+    build: metabase/.
     container_name: metabase_full_app_embedding_demo
     hostname: metabase
     ports:
@@ -17,6 +17,11 @@ services:
       - "MB_JWT_SHARED_SECRET=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
     networks: 
       - metanet1
+    healthcheck:
+      test: curl --fail -I http://localhost:3000/api/health || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 5
   setup_full_app_embedding_demo:
     image: bash:5.1.16
     container_name: setup_full_app_embedding_demo
@@ -25,7 +30,8 @@ services:
     networks:
       - metanet1
     depends_on:
-      - metabase_full_app_embedding_demo
+      metabase:
+        condition: service_healthy
     command: sh /tmp/metabase-setup.sh metabase:3000
   node_full_app_embedding_demo:
     build: .
@@ -38,6 +44,9 @@ services:
     environment:
       - METABASE_URL=http://localhost:3000
       - PORT=8080
+    depends_on:
+      metabase:
+        condition: service_healthy
 networks: 
   metanet1:
     driver: bridge
