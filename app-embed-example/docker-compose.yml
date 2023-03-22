@@ -1,25 +1,52 @@
-version: "3"
+version: '3.9'
 services:
   metabase:
-    image: metabase/metabase-enterprise:latest
-    environment:
-      - MB_PREMIUM_EMBEDDING_TOKEN=${MB_PREMIUM_EMBEDDING_TOKEN}
-      - MB_ENABLE_EMBEDDING=true
-      - MB_EMBEDDING_APP_ORIGIN=http://${HOST}:3001
-      - MB_JWT_ENABLED=true
-      - MB_JWT_IDENTITY_PROVIDER_URI=http://${HOST}:3001/api/auth/metabase
-      - MB_JWT_SHARED_SECRET=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-      - MB_SAML_ENABLED=${MB_SAML_ENABLED}
-      - MB_SAML_APPLICATION_NAME=${MB_SAML_APPLICATION_NAME}
-      - MB_SAML_IDENTITY_PROVIDER_URI=${MB_SAML_IDENTITY_PROVIDER_URI}
-      - MB_SAML_IDENTITY_PROVIDER_CERTIFICATE=${MB_SAML_IDENTITY_PROVIDER_CERTIFICATE}
+    build: metabase/.
+    container_name: metabase_full_app_embedding_demo
+    hostname: metabase
     ports:
-      - "3000:3000"
-  metalbase:
+      - 3000:3000
+    environment: 
+      - "MB_SITE_URL=http://localhost:3000"
+      # - "MB_SESSION_COOKIE_SAMESITE=None"
+      - "MB_EMBEDDING_APP_ORIGIN=*"
+      - "MB_ENABLE_EMBEDDING=true"
+      - "MB_PREMIUM_EMBEDDING_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      - "MB_JWT_ENABLED=true"
+      - "MB_JWT_IDENTITY_PROVIDER_URI=http://localhost:8080/api/auth/metabase"
+      - "MB_JWT_SHARED_SECRET=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    networks: 
+      - metanet1
+    healthcheck:
+      test: curl --fail -I http://localhost:3000/api/health || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  setup_full_app_embedding_demo:
+    image: bash:5.1.16
+    container_name: setup_full_app_embedding_demo
+    volumes:
+      - $PWD/setup:/tmp
+    networks:
+      - metanet1
+    depends_on:
+      metabase:
+        condition: service_healthy
+    command: sh /tmp/metabase-setup.sh metabase:3000
+  node_full_app_embedding_demo:
     build: .
-    environment:
-      - PORT=3001
-      - METABASE_URL=http://${HOST}:3000
-      - METABASE_JWT_SHARED_SECRET=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    container_name: webapp_full_app_embedding_demo
+    hostname: webapp
     ports:
-      - "3001:3001"
+      - 8080:8080
+    networks:
+      - metanet1
+    environment:
+      - METABASE_URL=http://localhost:3000
+      - PORT=8080
+    depends_on:
+      metabase:
+        condition: service_healthy
+networks: 
+  metanet1:
+    driver: bridge
