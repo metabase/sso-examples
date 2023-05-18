@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 8080;
 
 const METABASE_URL = process.env.METABASE_URL || "http://localhost:3000";
 const METABASE_JWT_SHARED_SECRET =
-  process.env.METABASE_JWT_SHARED_SECRET ||
+  process.env.MB_JWT_SHARED_SECRET ||
   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
 
 // This matches a user in the Sample Dataset
