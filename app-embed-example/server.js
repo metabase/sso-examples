@@ -35,6 +35,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/config", (req, res) => res.json({ METABASE_URL }));
 
+const mods = process.env.MODS ? process.env.MODS : ''
+
 app.get("/api/auth/metabase", (req, res) => {
   // NOTE: in a real application you would use the embedding application's session to determine which user to use here.
   // If no session exists you would need to show an error or redirect to the embedding application's login page.
@@ -44,7 +46,7 @@ app.get("/api/auth/metabase", (req, res) => {
       pathname: `${METABASE_URL}/auth/sso`,
       query: {
         jwt: signUserToken(user),
-        return_to: req.query.return_to
+        return_to: `${req.query.return_to}${mods}`
       }
     })
   );
