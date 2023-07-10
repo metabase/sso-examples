@@ -44,6 +44,7 @@ services:
     environment:
       - METABASE_URL=http://localhost:3000
       - PORT=8080
+      - MODS=?logo=false&top_nav=false&search=false&new_button=false&side_nav=false&header=false&additional_info=false&breadcrumbs=false&action_buttons=false
     depends_on:
       metabase:
         condition: service_healthy
