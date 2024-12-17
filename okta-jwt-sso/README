@@ -1,0 +1,32 @@
+# Metabase SSO with Okta + JWT
+
+An extremely basic demo of JWT SSO authentication
+
+## How does this work
+
+It's a web application that connects to Okta to authenticate, get user properties and then authenticate to Metabase via JWT with those properties
+
+## Structure of the project
+
+- server.js: the backend, here you'll see the routes and the structure to make the connection to Okta
+- public, src: the frontend, this is a basic react application that has a button to initiate the flow
+
+# How to run this project
+
+First of all you need to create a tenant in Okta, if you don't have one, please create a tenant
+
+In Okta:
+1) create a web application (OIDC - OpenID Connect)
+2) leave everything by default but the "Sign-in redirect URIs" (you need to enter localhost:3001/* there)
+3) once you confirm the project, you'll get a cliend id and a secret, please complete those in the server.js file
+
+In Metabase:
+1) you need a pro/enterprise token, so initialize Metabase and complete that in the settings->admin settings-license and billing section
+2) get the JWT signing key on settings->admin->authentication->jwt and complete that in the server.js
+3) complete the JWT URI to localhost:3001/auth
+
+Now go to localhost:3001 and click on sign in, you should be taken to your okta tenant where you need to authenticate and then you should be taken to Metabase
+
+## Containers
+
+There's a docker-compose.yaml file in the root folder that you can simply raise with "docker compose up" command if you have docker installed. Please remember to complete all the environment variables before starting it

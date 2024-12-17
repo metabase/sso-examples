@@ -1,0 +1,47 @@
+services:
+  metabase:
+    build: metabase/.
+    container_name: metabase_full_app_embedding_demo
+    hostname: metabase
+    ports:
+      - 3000:3000
+    environment: 
+      - "MB_SITE_URL=http://localhost:3000"
+      - "MB_EMBEDDING_APP_ORIGIN=*"
+      - "MB_ENABLE_EMBEDDING=true"
+      - "MB_PREMIUM_EMBEDDING_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      - "MB_JWT_ENABLED=true"
+      - "MB_JWT_IDENTITY_PROVIDER_URI=http://localhost:3001/login"
+      - "MB_JWT_SHARED_SECRET=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    networks: 
+      - metanet1
+    healthcheck:
+      test: curl --fail -I http://localhost:3000/api/health || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  setup_full_app_embedding_demo:
+    image: bash:5.1.16
+    container_name: setup_full_app_embedding_demo
+    volumes:
+      - $PWD/setup:/tmp
+    networks:
+      - metanet1
+    depends_on:
+      metabase:
+        condition: service_healthy
+    command: sh /tmp/metabase-setup.sh metabase:3000
+  okta_jwt_sso:
+    build: .
+    container_name: okta_jwt_sso
+    hostname: webapp
+    ports:
+      - 3001:3001
+    networks:
+      - metanet1
+    depends_on:
+      metabase:
+        condition: service_healthy
+networks: 
+  metanet1:
+    driver: bridge
